@@ -93,7 +93,17 @@ public:
 protected:
 
     virtual nsapi_error_t connect_socket(char *host, uint16_t port) {
-        return ((TCPSocket*)_socket)->connect(host, port);
+        NetworkInterface *network = NetworkInterface::get_default_instance();
+        SocketAddress socket_address;
+        socket_address.set_port(port);
+
+        nsapi_error_t err = network->gethostbyname(host, &socket_address);
+
+        if (err != NSAPI_ERROR_OK) {
+            return err;
+        }
+
+        return ((TCPSocket*)_socket)->connect(socket_address);
     }
 };
 
