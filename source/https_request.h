@@ -101,6 +101,8 @@ protected:
             return err;
         }
 
+        _socket->set_timeout(10000);
+
         return ((TLSSocket*)_socket)->connect(socket_address);
     }
 };
